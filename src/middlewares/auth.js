@@ -1,6 +1,6 @@
 // import
 const jwt = require('jsonwebtoken');
-
+const { Products } = require('../../models');
 // checked login
 function isAuthenticated(req, res, next) {
   const token = req.headers['authorization'];
@@ -16,10 +16,10 @@ function isAuthenticated(req, res, next) {
 
 async function checkProductOwn(req, res, next) {
   const id = req.params.id;
-  const user = req.user.userId;
+  const user = req.user.id;
   const product = await Products.findByPk(id);
 
-  if (user !== product.UserId) {
+  if (user !== product.id) {
     return res.status(403).json({
       errorMessage: '권한이 없습니다.',
     });

@@ -86,7 +86,7 @@ router.post('/auth/login', async (req, res) => {
     });
   }
 
-  const accessToken = jwt.sign({ userId: user.userId }, process.env.SECRETTEXT, { expiresIn: '30m' });
+  const accessToken = jwt.sign({ id: user.id }, process.env.SECRETTEXT, { expiresIn: '30m' });
   res.send(accessToken);
 });
 //logout

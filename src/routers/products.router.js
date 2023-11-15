@@ -8,7 +8,7 @@ const router = express.Router();
 //getProducts
 router.get('/products', isAuthenticated, async (req, res) => {
   const products = await Products.findAll({
-    attributes: ['productId', 'UserId', 'title', 'contents', 'state', [sequelize.col('username'), 'username']],
+    attributes: ['id', 'userId', 'title', 'contents', 'status', [sequelize.col('username'), 'username']],
     include: {
       model: Users,
       attributes: [],
@@ -20,7 +20,7 @@ router.get('/products', isAuthenticated, async (req, res) => {
 router.get('/product/:id', isAuthenticated, async (req, res) => {
   const id = req.params.id;
   const product = await Products.findByPk(id, {
-    attributes: ['productId', 'UserId', 'title', 'contents', 'state', [sequelize.col('username'), 'username']],
+    attributes: ['id', 'userId', 'title', 'contents', 'status', [sequelize.col('username'), 'username']],
     include: {
       model: Users,
       attributes: [],
@@ -31,7 +31,7 @@ router.get('/product/:id', isAuthenticated, async (req, res) => {
 // add new product
 router.post('/products/new', isAuthenticated, async (req, res) => {
   const { title, price, contents, password } = req.body;
-  const UserId = req.user.userId;
+  const userId = req.user.id;
   // inputData checks
   if (!title || !price || !contents || !password) {
     return res.status(400).json({
@@ -39,7 +39,7 @@ router.post('/products/new', isAuthenticated, async (req, res) => {
     });
   }
   const newProduct = {
-    UserId,
+    userId,
     title,
     price,
     contents,
@@ -71,7 +71,7 @@ router.put('/product/:id', [isAuthenticated, checkProductOwn], async (req, res) 
   };
   await Products.update(updateProduct, {
     where: {
-      productId: id,
+      id: id,
     },
   });
 
@@ -85,7 +85,7 @@ router.delete('/product/:id', [isAuthenticated, checkProductOwn], async (req, re
 
   await Products.destroy({
     where: {
-      productId: id,
+      id: id,
     },
   });
   res.status(200).json({
