@@ -1,8 +1,8 @@
 const express = require('express');
-const { body } = require('express-validator');
+const { body, validationResult } = require('express-validator');
 const { Products, Users, sequelize } = require('../../models');
 
-const { validation } = require('../middlewares/validation.js');
+const { validate } = require('../middlewares/validation.js');
 const { isAuthenticated, checkProductOwn } = require('../middlewares/auth.js');
 
 const router = express.Router();
@@ -39,7 +39,7 @@ router.post(
     body('price').trim().notEmpty().withMessage('price 을 입력해주세요.'),
     body('contents').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
     body('contents').trim().notEmpty().withMessage('password 을 입력해주세요.'),
-    validation,
+    validate,
   ],
   async (req, res) => {
     const { title, price, contents, password } = req.body;
@@ -65,34 +65,47 @@ router.post(
   }
 );
 // update product
-router.put('/product/:id', [isAuthenticated, checkProductOwn], async (req, res) => {
-  const id = req.params.id;
-  const { title, price, contents, state, password } = req.body;
-  // 해당 유저인지 미들웨어 체크 필요
+router.put(
+  '/product/:id',
+  [isAuthenticated, checkProductOwn],
+  [
+    body('title').trim().notEmpty().withMessage('title 을 입력해주세요.'),
+    body('price').trim().notEmpty().withMessage('price 을 입력해주세요.'),
+    body('contents').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
+    body('contents').trim().notEmpty().withMessage('password 을 입력해주세요.'),
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    console.log(errors);
 
-  if (!title || !price || !contents || !state || !password) {
-    return res.status(400).json({
-      message: '요청한 데이터 형식이 올바르지 않습니다.',
+    const id = req.params.id;
+    const { title, price, contents, state, password } = req.body;
+    // 해당 유저인지 미들웨어 체크 필요
+
+    if (!title || !price || !contents || !state || !password) {
+      return res.status(400).json({
+        message: '요청한 데이터 형식이 올바르지 않습니다.',
+      });
+    }
+    const product = req.product;
+    const updateProduct = {
+      UserId: product.UserId,
+      title: title ? title : product.title,
+      price: price ? price : product.price,
+      contents: contents ? contents : product.contents,
+      state: state ? state : product.state,
+    };
+    await Products.update(updateProduct, {
+      where: {
+        id: id,
+      },
+    });
+
+    res.status(200).json({
+      message: '상품 수정하였습니다.',
     });
   }
-  const product = req.product;
-  const updateProduct = {
-    UserId: product.UserId,
-    title: title ? title : product.title,
-    price: price ? price : product.price,
-    contents: contents ? contents : product.contents,
-    state: state ? state : product.state,
-  };
-  await Products.update(updateProduct, {
-    where: {
-      id: id,
-    },
-  });
-
-  res.status(200).json({
-    message: '상품 수정하였습니다.',
-  });
-});
+);
 // delete product
 router.delete('/product/:id', [isAuthenticated, checkProductOwn], async (req, res) => {
   const id = req.params.id;

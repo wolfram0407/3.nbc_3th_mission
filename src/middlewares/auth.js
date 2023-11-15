@@ -23,10 +23,10 @@ function isAuthenticated(req, res, next) {
 
 async function checkProductOwn(req, res, next) {
   const id = req.params.id;
-  const user = req.user.id;
+  const userId = req.user.id;
   const product = await Products.findByPk(id);
 
-  if (user !== product.id) {
+  if (userId !== product.userId) {
     return res.status(403).json({
       errorMessage: '권한이 없습니다.',
     });

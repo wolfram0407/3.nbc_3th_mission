@@ -25,7 +25,7 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDUx
 
 ### 신규 Product 생성
 Post http://localhost:3003/api/products/new
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDUzNzM0LCJleHAiOjE3MDAwNTU1MzR9.AF0AheRbguciGGKBiAsm4eDIsy6gVAscQIkJeRmH0lQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDU2MTcwLCJleHAiOjE3MDAwNTc5NzB9.i9GtoLORv3rx_Wt-GwzsMyy53pIzt2udGCOCyn-z2hQ
 Content-Type: application/json
 
 {
@@ -44,12 +44,11 @@ GET http://localhost:3003/api/product/1
 Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDQ5MTIyLCJleHAiOjE3MDAwNTA5MjJ9.bp5xnV-uSslFvhZ4jVz4RykrlfqL3O2GNf7e9CfkcfI
 
 ### Product 수정
-Put http://localhost:3003/api/product/1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDQ5MTIyLCJleHAiOjE3MDAwNTA5MjJ9.bp5xnV-uSslFvhZ4jVz4RykrlfqL3O2GNf7e9CfkcfI
+Put http://localhost:3003/api/product/2
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDU2MTcwLCJleHAiOjE3MDAwNTc5NzB9.i9GtoLORv3rx_Wt-GwzsMyy53pIzt2udGCOCyn-z2hQ
 Content-Type: application/json
 
 {
-  "title" : "test title1_modified",
   "price" : 10000,
   "contents" : "test contents1",
   "password" : "1q2w3e4r!@",
