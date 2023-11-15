@@ -2,6 +2,7 @@ const express = require('express');
 const { body } = require('express-validator');
 const { Products, Users, sequelize } = require('../../models');
 
+const { validation } = require('../middlewares/validation.js');
 const { isAuthenticated, checkProductOwn } = require('../middlewares/auth.js');
 
 const router = express.Router();
@@ -30,28 +31,39 @@ router.get('/product/:id', isAuthenticated, async (req, res) => {
   res.send(product);
 });
 // add new product
-router.post('/products/new', isAuthenticated, async (req, res) => {
-  const { title, price, contents, password } = req.body;
-  const userId = req.user.id;
+router.post(
+  '/products/new',
+  isAuthenticated,
+  [
+    body('title').trim().notEmpty().withMessage('title 을 입력해주세요.'),
+    body('price').trim().notEmpty().withMessage('price 을 입력해주세요.'),
+    body('contents').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
+    body('contents').trim().notEmpty().withMessage('password 을 입력해주세요.'),
+    validation,
+  ],
+  async (req, res) => {
+    const { title, price, contents, password } = req.body;
+    const userId = req.user.id;
 
-  // // inputData checks
-  // if (!title || !price || !contents || !password) {
-  //   return res.status(400).json({
-  //     message: '요청한 데이터 형식이 올바르지 않습니다.',
-  //   });
-  // }
-  const newProduct = {
-    userId,
-    title,
-    price,
-    contents,
-    password,
-  };
-  await Products.create(newProduct);
-  res.status(201).json({
-    message: '등록되었습니다.',
-  });
-});
+    // inputData checks
+    if (!title || !contents || !password) {
+      return res.status(400).json({
+        message: '요청한 데이터 형식이 올바르지 않습니다.',
+      });
+    }
+    const newProduct = {
+      userId,
+      title,
+      price,
+      contents,
+      password,
+    };
+    await Products.create(newProduct);
+    res.status(201).json({
+      message: '등록되었습니다.',
+    });
+  }
+);
 // update product
 router.put('/product/:id', [isAuthenticated, checkProductOwn], async (req, res) => {
   const id = req.params.id;
