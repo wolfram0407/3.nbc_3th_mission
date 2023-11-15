@@ -21,18 +21,16 @@ Content-Type: application/json
 
 ### 회원상세정보
 GET http://localhost:3003/api/mypage
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDQ5MTIyLCJleHAiOjE3MDAwNTA5MjJ9.bp5xnV-uSslFvhZ4jVz4RykrlfqL3O2GNf7e9CfkcfI
-
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDUxNTQ0LCJleHAiOjE3MDAwNTMzNDR9.x4RvQIyXqFe3Jk9PD4TH7Swiya-TpbVcUldr2fAct6E
 
 ### 신규 Product 생성
 Post http://localhost:3003/api/products/new
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDQ5MTIyLCJleHAiOjE3MDAwNTA5MjJ9.bp5xnV-uSslFvhZ4jVz4RykrlfqL3O2GNf7e9CfkcfI
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDUxNTQ0LCJleHAiOjE3MDAwNTMzNDR9.x4RvQIyXqFe3Jk9PD4TH7Swiya-TpbVcUldr2fAct6E
 Content-Type: application/json
 
 {
-  "title" : "test title1",
-  "price" : 10000,
-  "contents" : "test contents1",
+  "title" : "test title2",
+  "contents" : "test contents2",
   "password" : "1q2w3e4r!@"
 }
 

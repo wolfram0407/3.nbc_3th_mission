@@ -1,10 +1,11 @@
 const express = require('express');
-
+const { body } = require('express-validator');
 const { Products, Users, sequelize } = require('../../models');
 
 const { isAuthenticated, checkProductOwn } = require('../middlewares/auth.js');
 
 const router = express.Router();
+
 //getProducts
 router.get('/products', isAuthenticated, async (req, res) => {
   const products = await Products.findAll({
@@ -32,12 +33,13 @@ router.get('/product/:id', isAuthenticated, async (req, res) => {
 router.post('/products/new', isAuthenticated, async (req, res) => {
   const { title, price, contents, password } = req.body;
   const userId = req.user.id;
-  // inputData checks
-  if (!title || !price || !contents || !password) {
-    return res.status(400).json({
-      message: '요청한 데이터 형식이 올바르지 않습니다.',
-    });
-  }
+
+  // // inputData checks
+  // if (!title || !price || !contents || !password) {
+  //   return res.status(400).json({
+  //     message: '요청한 데이터 형식이 올바르지 않습니다.',
+  //   });
+  // }
   const newProduct = {
     userId,
     title,
