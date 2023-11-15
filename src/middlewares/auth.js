@@ -14,8 +14,20 @@ function isAuthenticated(req, res, next) {
   });
 }
 
-function checkAuthenticated(req, res, next) {}
+async function checkProductOwn(req, res, next) {
+  const id = req.params.id;
+  const user = req.user.userId;
+  const product = await Products.findByPk(id);
 
+  if (user !== product.UserId) {
+    return res.status(403).json({
+      errorMessage: '권한이 없습니다.',
+    });
+  }
+  req.product = product;
+  next();
+}
 module.exports = {
   isAuthenticated,
+  checkProductOwn,
 };

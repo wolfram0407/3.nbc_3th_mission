@@ -1,7 +1,8 @@
-"use strict";
-const { Model } = require("sequelize");
-const bcrypt = require("bcrypt");
-require("dotenv").config();
+'use strict';
+const { Model } = require('sequelize');
+const bcrypt = require('bcrypt');
+
+require('dotenv').config();
 
 const saltRounds = process.env.SALTROUNDS;
 module.exports = (sequelize, DataTypes) => {
@@ -9,8 +10,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       this.hasMany(models.Products, {
         // OneToMany -> Users : Products
-        sourceKey: "id",
-        foreignKey: "userId",
+        sourceKey: 'id',
+        foreignKey: 'userId',
       });
     }
   }
@@ -31,8 +32,18 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: "Users",
+      modelName: 'Users',
     }
   );
+  Users.beforeCreate(async user => {
+    const salt = await bcrypt.genSalt(Number(saltRounds));
+    const hashedPassword = await bcrypt.hash(user.password, salt);
+
+    user.password = hashedPassword;
+  });
+
+  Users.prototype.comparePassword = async (user, plainPassword) => {
+    return await bcrypt.compare(plainPassword, user.password);
+  };
   return Users;
 };
