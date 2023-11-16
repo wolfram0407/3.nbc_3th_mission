@@ -4,13 +4,22 @@ const { Products, Users, sequelize } = require('../../models');
 
 const { validate, validateLeastOne } = require('../middlewares/validation.js');
 const { isAuthenticated, checkProductOwn } = require('../middlewares/auth.js');
-
+const { productEnum } = require('../../config/product.enum.js');
+const { emit } = require('nodemon');
 const router = express.Router();
 
 //getProducts
 router.get('/products', isAuthenticated, async (req, res) => {
   const products = await Products.findAll({
-    attributes: ['id', 'userId', 'title', 'contents', 'status', [sequelize.col('username'), 'username']],
+    attributes: [
+      'id',
+      'userId',
+      'title',
+      'contents',
+      'status',
+      [sequelize.col('username'), 'username'],
+      ['createdAt', 'DESC'],
+    ],
     include: {
       model: Users,
       attributes: [],
@@ -22,12 +31,17 @@ router.get('/products', isAuthenticated, async (req, res) => {
 router.get('/product/:id', isAuthenticated, async (req, res) => {
   const id = req.params.id;
   const product = await Products.findByPk(id, {
-    attributes: ['id', 'userId', 'title', 'contents', 'status', [sequelize.col('username'), 'username']],
+    attributes: ['id', 'userId', 'title', 'contents', 'status', [sequelize.col('username'), 'username'], 'createdAt'],
     include: {
       model: Users,
       attributes: [],
     },
   });
+  if (!product) {
+    return res.status(404).json({
+      errorMessage: '해당 상품이 없습니다.',
+    });
+  }
   res.send(product);
 });
 // add new product
@@ -41,7 +55,7 @@ router.post(
     validate,
   ],
   async (req, res) => {
-    const { title, price, contents, password } = req.body;
+    const { title, price, contents } = req.body;
     const userId = req.user.id;
 
     const newProduct = {
@@ -49,7 +63,6 @@ router.post(
       title,
       price,
       contents,
-      password,
     };
     await Products.create(newProduct);
     res.status(201).json({
@@ -66,12 +79,19 @@ router.put(
     body('title').trim().notEmpty().withMessage('title 을 입력해주세요.'),
     body('contents').trim().notEmpty().withMessage('price 을 입력해주세요.'),
     body('price').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
+    body('status').trim().notEmpty().withMessage('state 을 입력해주세요.'),
     validateLeastOne,
   ],
 
   async (req, res) => {
     const id = req.params.id;
-    const { title, price, contents, state, password } = req.body;
+    const { title, price, contents, status } = req.body;
+    // enum check
+    if (status && !productEnum.find(enums => enums === status)) {
+      return res.status(400).json({
+        errorMessage: '요청한 데이터 형식이 올바르지 않습니다.',
+      });
+    }
 
     const product = req.product;
     const updateProduct = {
@@ -79,8 +99,9 @@ router.put(
       title: title ? title : product.title,
       price: price ? price : product.price,
       contents: contents ? contents : product.contents,
-      state: state ? state : product.state,
+      status: status ? status : product.status,
     };
+
     await Products.update(updateProduct, {
       where: {
         id: id,

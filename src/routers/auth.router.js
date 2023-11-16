@@ -12,12 +12,12 @@ const { Users } = require('../../models');
 const { validate } = require('../middlewares/validation.js');
 const { body } = require('express-validator');
 const router = express.Router();
-
+// 회원가입
 router.post(
   '/auth/signup',
   [
-    body('email').trim().notEmpty().withMessage('email 을 입력해주세요.'),
-    body('password').trim().notEmpty().withMessage('password 을 입력해주세요.'),
+    body('email').trim().notEmpty().isEmail().withMessage('email 을 입력해주세요.'),
+    body('password').trim().notEmpty().isLength({ min: 6 }).withMessage('password 을 입력해주세요.'),
     body('passwordConfirm').trim().notEmpty().withMessage('passwordConfirm 을 입력해주세요.'),
     body('username').trim().notEmpty().withMessage('username 을 입력해주세요.'),
     validate,
@@ -31,7 +31,7 @@ router.post(
         message: '패스워드가 일치하지 않습니다.',
       });
     }
-
+    // find user
     const existsEmail = await Users.findAll({
       where: {
         email,
@@ -52,17 +52,19 @@ router.post(
     };
 
     await Users.create(newUser);
+    delete newUser.password;
     res.status(201).json({
+      ...newUser,
       message: '회원가입이 되었습니다.',
     });
   }
 );
-//login
+// 로그인
 router.post(
   '/auth/login',
   [
-    body('email').trim().notEmpty().withMessage('email 을 입력해주세요.'),
-    body('password').trim().notEmpty().withMessage('password 을 입력해주세요.'),
+    body('email').trim().notEmpty().isEmail().withMessage('email 을 입력해주세요.'),
+    body('password').trim().notEmpty().isLength({ min: 6 }).withMessage('password 을 입력해주세요.'),
     validate,
   ],
   async (req, res) => {
@@ -75,7 +77,7 @@ router.post(
     });
 
     if (!user) {
-      return res.status(400).json({
+      return res.status(401).json({
         errorMessage: '이메일을 확인해주세요.',
       });
     }
@@ -89,15 +91,8 @@ router.post(
     }
 
     const accessToken = jwt.sign({ id: user.id }, process.env.SECRETTEXT, { expiresIn: '30m' });
-    res.send(accessToken);
+    res.status(200).send({ accessToken: accessToken });
   }
 );
-
-//logout
-router.post('/logout', (req, res) => {
-  req.logOut(function (err) {
-    if (err) return next(err);
-  });
-});
 
 module.exports = router;
