@@ -45,11 +45,10 @@ Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDQ
 
 ### Product 수정
 Put http://localhost:3003/api/product/2
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMDU2MTcwLCJleHAiOjE3MDAwNTc5NzB9.i9GtoLORv3rx_Wt-GwzsMyy53pIzt2udGCOCyn-z2hQ
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTAzODkzLCJleHAiOjE3MDAxMDU2OTN9.YB6N4smOg-xZM-JWoNFFDhVXoLuC1L73uzXSZeUY9Yk
 Content-Type: application/json
 
 {
-  "price" : 10000,
   "contents" : "test contents1",
   "password" : "1q2w3e4r!@",
   "state" : "SOLD_OUT"

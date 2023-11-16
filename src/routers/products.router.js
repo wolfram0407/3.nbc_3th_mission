@@ -1,8 +1,8 @@
 const express = require('express');
-const { body, validationResult } = require('express-validator');
+const { body } = require('express-validator');
 const { Products, Users, sequelize } = require('../../models');
 
-const { validate } = require('../middlewares/validation.js');
+const { validate, validateLeastOne } = require('../middlewares/validation.js');
 const { isAuthenticated, checkProductOwn } = require('../middlewares/auth.js');
 
 const router = express.Router();
@@ -36,21 +36,14 @@ router.post(
   isAuthenticated,
   [
     body('title').trim().notEmpty().withMessage('title 을 입력해주세요.'),
-    body('price').trim().notEmpty().withMessage('price 을 입력해주세요.'),
-    body('contents').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
-    body('contents').trim().notEmpty().withMessage('password 을 입력해주세요.'),
+    body('contents').trim().notEmpty().withMessage('price 을 입력해주세요.'),
+    body('price').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
     validate,
   ],
   async (req, res) => {
     const { title, price, contents, password } = req.body;
     const userId = req.user.id;
 
-    // inputData checks
-    if (!title || !contents || !password) {
-      return res.status(400).json({
-        message: '요청한 데이터 형식이 올바르지 않습니다.',
-      });
-    }
     const newProduct = {
       userId,
       title,
@@ -64,29 +57,22 @@ router.post(
     });
   }
 );
+
 // update product
 router.put(
   '/product/:id',
   [isAuthenticated, checkProductOwn],
   [
     body('title').trim().notEmpty().withMessage('title 을 입력해주세요.'),
-    body('price').trim().notEmpty().withMessage('price 을 입력해주세요.'),
-    body('contents').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
-    body('contents').trim().notEmpty().withMessage('password 을 입력해주세요.'),
+    body('contents').trim().notEmpty().withMessage('price 을 입력해주세요.'),
+    body('price').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
+    validateLeastOne,
   ],
-  async (req, res) => {
-    const errors = validationResult(req);
-    console.log(errors);
 
+  async (req, res) => {
     const id = req.params.id;
     const { title, price, contents, state, password } = req.body;
-    // 해당 유저인지 미들웨어 체크 필요
 
-    if (!title || !price || !contents || !state || !password) {
-      return res.status(400).json({
-        message: '요청한 데이터 형식이 올바르지 않습니다.',
-      });
-    }
     const product = req.product;
     const updateProduct = {
       UserId: product.UserId,
