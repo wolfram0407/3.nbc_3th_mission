@@ -4,11 +4,11 @@
 
 ### 1. API 명세서 작성\*\*
 
-![](./docs/images/api.png){width : 300 height="450"}
+![](./docs/images/api.png)
 
 ### 2. ERD 작성\*\*
 
-![](./docs/images/dbdiagram.png){width : 450 height="300"}
+![](./docs/images/dbdiagram.png)
 
 ## 2️⃣ 개발: 인증 관련 기능
 
