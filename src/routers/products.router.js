@@ -5,11 +5,11 @@ const { Products, Users, sequelize } = require('../../models');
 const { validate, validateLeastOne } = require('../middlewares/validation.js');
 const { isAuthenticated, checkProductOwn } = require('../middlewares/auth.js');
 const { productEnum } = require('../../config/product.enum.js');
-const { emit } = require('nodemon');
+
 const router = express.Router();
 
 //getProducts
-router.get('/products', isAuthenticated, async (req, res) => {
+router.get('/products', isAuthenticated, async (req, res, next) => {
   const query = req.query;
   const sort = query.sort ? query.sort : 'DESC';
   const products = await Products.findAll({
@@ -20,10 +20,13 @@ router.get('/products', isAuthenticated, async (req, res) => {
     },
     order: [['createdAt', sort]],
   });
-  res.send(products);
+  if (!products) {
+    return next(new Error('CheckDBConnect'));
+  }
+  res.status(200).send(products);
 });
 // getProductOne
-router.get('/product/:id', isAuthenticated, async (req, res) => {
+router.get('/product/:id', isAuthenticated, async (req, res, next) => {
   const id = req.params.id;
   const product = await Products.findByPk(id, {
     attributes: ['id', 'userId', 'title', 'contents', 'status', [sequelize.col('username'), 'username'], 'createdAt'],
@@ -33,11 +36,9 @@ router.get('/product/:id', isAuthenticated, async (req, res) => {
     },
   });
   if (!product) {
-    return res.status(404).json({
-      errorMessage: '해당 상품이 없습니다.',
-    });
+    return next(new Error('ProductNotFound'));
   }
-  res.send(product);
+  res.status(200).send(product);
 });
 // add new product
 router.post(
@@ -49,17 +50,20 @@ router.post(
     body('price').trim().notEmpty().withMessage('contents 을 입력해주세요.'),
     validate,
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     const { title, price, contents } = req.body;
     const userId = req.user.id;
 
-    const newProduct = {
+    const preProduct = {
       userId,
       title,
       price,
       contents,
     };
-    await Products.create(newProduct);
+    const newProduct = await Products.create(preProduct);
+    if (!newProduct) {
+      return next(new Error('CheckDBConnect'));
+    }
     res.status(201).json({
       message: '등록되었습니다.',
     });
@@ -78,14 +82,12 @@ router.put(
     validateLeastOne,
   ],
 
-  async (req, res) => {
+  async (req, res, next) => {
     const id = req.params.id;
     const { title, price, contents, status } = req.body;
     // enum check
     if (status && !productEnum.find(enums => enums === status)) {
-      return res.status(400).json({
-        errorMessage: '요청한 데이터 형식이 올바르지 않습니다.',
-      });
+      return next(new Error('ProductEnumCheck'));
     }
 
     const product = req.product;
@@ -96,27 +98,30 @@ router.put(
       contents: contents ? contents : product.contents,
       status: status ? status : product.status,
     };
-
-    await Products.update(updateProduct, {
+    const updateProducts = await Products.update(updateProduct, {
       where: {
         id: id,
       },
     });
-
+    if (!updateProducts) {
+      return next(new Error('CheckDBConnect'));
+    }
     res.status(200).json({
       message: '상품 수정하였습니다.',
     });
   }
 );
 // delete product
-router.delete('/product/:id', [isAuthenticated, checkProductOwn], async (req, res) => {
+router.delete('/product/:id', [isAuthenticated, checkProductOwn], async (req, res, next) => {
   const id = req.params.id;
-
-  await Products.destroy({
+  const deleteProduct = await Products.destroy({
     where: {
       id: id,
     },
   });
+  if (!deleteProduct) {
+    return next(new Error('CheckDBConnect'));
+  }
   res.status(200).json({
     message: '상품 삭제하였습니다.',
   });

@@ -16,20 +16,31 @@ const router = express.Router();
 router.post(
   '/auth/signup',
   [
-    body('email').trim().notEmpty().isEmail().withMessage('email 을 입력해주세요.'),
-    body('password').trim().notEmpty().isLength({ min: 6 }).withMessage('password 을 입력해주세요.'),
-    body('passwordConfirm').trim().notEmpty().withMessage('passwordConfirm 을 입력해주세요.'),
+    body('email')
+      .notEmpty()
+      .withMessage('email 을 입력해주세요.')
+      .isEmail()
+      .withMessage('email 형식을 맞춰서 입력해주세요.'),
+    body('password')
+      .trim()
+      .notEmpty()
+      .withMessage('password 을 입력해주세요.')
+      .isLength({ min: 6 })
+      .withMessage('6자리 이상 입력해주세요.'),
+    body('passwordConfirm')
+      .trim()
+      .notEmpty()
+      .withMessage('passwordConfirm 을 입력해주세요.')
+      .isLength({ min: 6 })
+      .withMessage('6자리 이상 입력해주세요.'),
     body('username').trim().notEmpty().withMessage('username 을 입력해주세요.'),
     validate,
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     const { email, password, passwordConfirm, username } = req.body;
-
     // password check
     if (password !== passwordConfirm) {
-      return res.status(401).json({
-        message: '패스워드가 일치하지 않습니다.',
-      });
+      return next(new Error('NotCorrect'));
     }
     // find user
     const existsEmail = await Users.findAll({
@@ -37,24 +48,24 @@ router.post(
         email,
       },
     });
-
     if (existsEmail.length) {
-      res.status(400).json({
-        errorMessage: '이미 사용인 이메일 입니다.',
-      });
-      return;
+      return next(new Error('ExistsEmail'));
     }
 
-    const newUser = {
+    const preUser = {
       email,
       password,
       username,
     };
 
-    await Users.create(newUser);
-    delete newUser.password;
+    const existedUser = await Users.create(preUser);
+    if (!existedUser) {
+      return next(new Error('CheckDBConnect'));
+    }
+    const NewUser = existedUser.dataValues;
+    delete NewUser.password;
     res.status(201).json({
-      ...newUser,
+      NewUser,
       message: '회원가입이 되었습니다.',
     });
   }
@@ -67,7 +78,7 @@ router.post(
     body('password').trim().notEmpty().isLength({ min: 6 }).withMessage('password 을 입력해주세요.'),
     validate,
   ],
-  async (req, res) => {
+  async (req, res, next) => {
     const { email, password } = req.body;
 
     const user = await Users.findOne({
@@ -77,21 +88,24 @@ router.post(
     });
 
     if (!user) {
-      return res.status(401).json({
-        errorMessage: '이메일을 확인해주세요.',
-      });
+      return next(new Error('EmailNotFound'));
     }
 
     const compare = await user.comparePassword(user, password);
 
     if (!compare) {
-      return res.status(400).json({
-        errorMessage: '패스워드를 확인해주세요.',
-      });
+      return next(new Error('NotCorrect'));
     }
 
     const accessToken = jwt.sign({ id: user.id }, process.env.SECRETTEXT, { expiresIn: '30m' });
-    res.status(200).send({ accessToken: accessToken });
+    const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESHSECRETTEXT, { expiresIn: '1d' });
+    // 현재는 res.send로 바로 보내자.
+    // res.cookie('jwt', refreshToken, {
+    //   httpOnly: true,
+    //   maxAge: 24 * 60 * 60,
+    // });
+
+    res.status(200).send({ accessToken, refreshToken });
   }
 );
 

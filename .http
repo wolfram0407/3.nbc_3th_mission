@@ -4,7 +4,7 @@ POST http://localhost:3003/api/auth/signup
 Content-Type: application/json
 
 {
-  "email" : "test4@example.com",
+  "email" : "test18@exampl.com",
   "password" : "1q2w3e4r!@",
   "passwordConfirm" : "1q2w3e4r!@",
   "username" : "박용택"
@@ -21,11 +21,12 @@ Content-Type: application/json
 
 ### 회원상세정보
 GET http://localhost:3003/api/mypage
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTE3MDQ2LCJleHAiOjE3MDAxMTg4NDZ9.cYcHigI99DTtXr_EylOQIomqnR2KFqeU57ggC2TIpzc
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjE3MzEyLCJleHAiOjE3MDAyMTkxMTJ9._16c00fLgqhZ51VpZoWagYPWdZm0fINWuFhkG0DJmpA
+Cookie:  
 
 ### 신규 Product 생성
 Post http://localhost:3003/api/products/new
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTE3MDQ2LCJleHAiOjE3MDAxMTg4NDZ9.cYcHigI99DTtXr_EylOQIomqnR2KFqeU57ggC2TIpzc
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjE3MzEyLCJleHAiOjE3MDAyMTkxMTJ9._16c00fLgqhZ51VpZoWagYPWdZm0fINWuFhkG0DJmpA
 Content-Type: application/json
 
 {
@@ -36,15 +37,15 @@ Content-Type: application/json
 
 ### 전체 Product 조회
 GET http://localhost:3003/api/products?sort=ASC
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTg4MTMyLCJleHAiOjE3MDAxODk5MzJ9.qiMTzTVCRLOn59ahI68M7lRwm_MwbVDYqvTcOWhfWFA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
 
 ### Product 상세 조회
 GET http://localhost:3003/api/product/3
-Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTIyODU2LCJleHAiOjE3MDAxMjQ2NTZ9.1ULdNq32QeZQfQGJvD6C8RUSfLQA-oRmSai33IbvVE8
+Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
 
 ### Product 수정
-Put http://localhost:3003/api/product/1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTIyODU2LCJleHAiOjE3MDAxMjQ2NTZ9.1ULdNq32QeZQfQGJvD6C8RUSfLQA-oRmSai33IbvVE8
+Put http://localhost:3003/api/product/12
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
 Content-Type: application/json
 
 {
@@ -53,7 +54,7 @@ Content-Type: application/json
 }
 
 ### Product 삭제
-DELETE http://localhost:3003/api/product/1
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTIyODU2LCJleHAiOjE3MDAxMjQ2NTZ9.1ULdNq32QeZQfQGJvD6C8RUSfLQA-oRmSai33IbvVE8
+DELETE http://localhost:3003/api/product/12
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
 
 

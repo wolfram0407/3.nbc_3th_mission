@@ -1,13 +1,11 @@
 const { validationResult } = require('express-validator');
-const { productEnum } = require('../../config/product.enum.js');
+
 function validate(req, res, next) {
   const errors = validationResult(req);
   if (errors.isEmpty()) {
     return next();
   }
-  return res.status(400).json({
-    message: errors.array()[0].msg,
-  });
+  return res.status(400).json({ message: errors.array()[0].msg });
 }
 
 function validateLeastOne(req, res, next) {
