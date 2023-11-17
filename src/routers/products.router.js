@@ -10,20 +10,15 @@ const router = express.Router();
 
 //getProducts
 router.get('/products', isAuthenticated, async (req, res) => {
+  const query = req.query;
+  const sort = query.sort ? query.sort : 'DESC';
   const products = await Products.findAll({
-    attributes: [
-      'id',
-      'userId',
-      'title',
-      'contents',
-      'status',
-      [sequelize.col('username'), 'username'],
-      ['createdAt', 'DESC'],
-    ],
+    attributes: ['id', 'userId', 'title', 'contents', 'status', [sequelize.col('username'), 'username'], 'createdAt'],
     include: {
       model: Users,
       attributes: [],
     },
+    order: [['createdAt', sort]],
   });
   res.send(products);
 });

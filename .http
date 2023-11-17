@@ -35,8 +35,8 @@ Content-Type: application/json
 }
 
 ### 전체 Product 조회
-GET http://localhost:3003/api/products
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTIyODU2LCJleHAiOjE3MDAxMjQ2NTZ9.1ULdNq32QeZQfQGJvD6C8RUSfLQA-oRmSai33IbvVE8
+GET http://localhost:3003/api/products?sort=ASC
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MSwiaWF0IjoxNzAwMTg4MTMyLCJleHAiOjE3MDAxODk5MzJ9.qiMTzTVCRLOn59ahI68M7lRwm_MwbVDYqvTcOWhfWFA
 
 ### Product 상세 조회
 GET http://localhost:3003/api/product/3
