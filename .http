@@ -4,10 +4,10 @@ POST http://localhost:3003/api/auth/signup
 Content-Type: application/json
 
 {
-  "email" : "test18@exampl.com",
+  "email" : "test4@exampl.com",   
   "password" : "1q2w3e4r!@",
   "passwordConfirm" : "1q2w3e4r!@",
-  "username" : "박용택"
+  "username" : "정근우"
 }
 
 ### 로그인 
@@ -15,18 +15,17 @@ POST http://localhost:3003/api/auth/login
 Content-Type: application/json
 
 {
-  "email" : "test1@example.com",
+  "email" : "test4@exampl.com",
   "password" : "1q2w3e4r!@"
 }
 
 ### 회원상세정보
 GET http://localhost:3003/api/mypage
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjE3MzEyLCJleHAiOjE3MDAyMTkxMTJ9._16c00fLgqhZ51VpZoWagYPWdZm0fINWuFhkG0DJmpA
-Cookie:  
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAwMjI2MTA1LCJleHAiOjE3MDAyMjYxMzV9.jp9w24vgViFGZ8-zG0sLxGkTrJ42dGgNVn12j1fe3eQ
 
 ### 신규 Product 생성
 Post http://localhost:3003/api/products/new
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjE3MzEyLCJleHAiOjE3MDAyMTkxMTJ9._16c00fLgqhZ51VpZoWagYPWdZm0fINWuFhkG0DJmpA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjI1MDE1LCJleHAiOjE3MDAyMjUwNDV9.LRLvhxgX261G_SBuRuU3CYzvf83WiESUPG1pPCLAVms
 Content-Type: application/json
 
 {
@@ -37,7 +36,7 @@ Content-Type: application/json
 
 ### 전체 Product 조회
 GET http://localhost:3003/api/products?sort=ASC
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAwMjI2MDI5LCJleHAiOjE3MDAyMjYwNTl9.0SmMm-9leJ3seUY9kyK-ph5VTuPIbdZplg4sCHEPzyo
 
 ### Product 상세 조회
 GET http://localhost:3003/api/product/3

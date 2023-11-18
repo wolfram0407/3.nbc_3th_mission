@@ -2,13 +2,13 @@
  회원가입 / 로그인 
 
  */
-
+const path = require('path');
 // import
 const express = require('express');
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-const { Users } = require('../../models');
+const { Users, Refreshtoken } = require('../../models');
 const { validate } = require('../middlewares/validation.js');
 const { body } = require('express-validator');
 const router = express.Router();
@@ -80,7 +80,6 @@ router.post(
   ],
   async (req, res, next) => {
     const { email, password } = req.body;
-
     const user = await Users.findOne({
       where: {
         email,
@@ -97,16 +96,47 @@ router.post(
       return next(new Error('NotCorrect'));
     }
 
-    const accessToken = jwt.sign({ id: user.id }, process.env.SECRETTEXT, { expiresIn: '30m' });
+    const accessToken = jwt.sign({ id: user.id }, process.env.SECRETTEXT, { expiresIn: '30s' });
     const refreshToken = jwt.sign({ id: user.id }, process.env.REFRESHSECRETTEXT, { expiresIn: '1d' });
-    // 현재는 res.send로 바로 보내자.
-    // res.cookie('jwt', refreshToken, {
-    //   httpOnly: true,
-    //   maxAge: 24 * 60 * 60,
-    // });
+    const preRefreshToken = {
+      userId: user.id,
+      refrshtoken: refreshToken,
+    };
+    const findToken = await Refreshtoken.findOne({
+      where: {
+        userId: user.id,
+      },
+    });
+    if (findToken) {
+      return res.send({
+        message: 'Access token IS Expiration plz get New access token',
+      });
+    }
 
+    const saveRefreshToken = await Refreshtoken.create(preRefreshToken);
+    if (!saveRefreshToken) {
+      return next(new Error('NotCorrect'));
+    }
     res.status(200).send({ accessToken, refreshToken });
   }
 );
 
+router.get('/auth/refresh', async (req, res, next) => {
+  const refreshToken = req.cookies.jwt;
+
+  if (!refreshToken) {
+    return next(new Error('RefreshTokenNotFound'));
+  }
+  const findRefreshToken = await Refreshtoken.findOne({
+    where: {
+      refrshtoken: refreshToken,
+    },
+  });
+  if (!findRefreshToken) {
+    return next(new Error('Forbidden'));
+  }
+
+  const accessToken = jwt.sign({ id: findRefreshToken.dataValues.id }, process.env.SECRETTEXT, { expiresIn: '30s' });
+  res.send(accessToken);
+});
 module.exports = router;

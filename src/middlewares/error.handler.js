@@ -1,4 +1,5 @@
 function errorHandler(errName, req, res) {
+  //console.log(errName);
   switch (errName) {
     case 'ExistsEmail':
       return res.status(400).json({
@@ -15,6 +16,7 @@ function errorHandler(errName, req, res) {
     case 'TokenExpiredError':
     case 'JsonWebTokenError':
     case 'jwt expired':
+    case 'RefreshTokenNotFound':
       return res.status(401).send({
         errorMessage: '로그인을 해주세요!',
       });
@@ -30,6 +32,7 @@ function errorHandler(errName, req, res) {
       return res.status(404).send({
         errorMessage: '이메일을 확인해주세요.',
       });
+
     case 'CheckDBConnect':
       return res.status(500).send({
         errorMessage: 'DB를 확인해주세요.',

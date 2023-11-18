@@ -20,10 +20,4 @@ router.get('/mypage', isAuthenticated, async (req, res) => {
   res.json(user);
 });
 
-router.get('/refresh', (req, res) => {
-  const cookies = req.cookies;
-  console.log(cookies);
-  res.send(cookies);
-});
-
 module.exports = router;

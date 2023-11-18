@@ -5,6 +5,10 @@ const { Products } = require('../../models');
 // checked login
 function isAuthenticated(req, res, next) {
   const token = req.headers['authorization'];
+  // const accessTokenToken = req.cookies.accessTokenToken;
+  // const refreshToken = req.cookies.refreshToken;
+
+  // if(refreshToken)
   jwt.verify(token, process.env.SECRETTEXT, (err, user) => {
     if (err) {
       return next(err);
