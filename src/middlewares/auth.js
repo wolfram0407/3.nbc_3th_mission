@@ -12,6 +12,7 @@ async function isAuthenticated(req, res, next) {
   if (!accessToken) {
     return next(new Error('accessTokenNotFound')); //
   }
+
   const verifiedAccessToken = verifyAccessToken(accessToken);
   // 인증 성공하면
   if (verifiedAccessToken) {
@@ -20,7 +21,7 @@ async function isAuthenticated(req, res, next) {
   }
   // accessToken not verified
   if (!refreshToken) {
-    return next(new Error('accessTokenNotFound'));
+    return next(new Error('refreshTokenNotFound'));
   }
   // exist refresh token
   const verifiedRefreshToken = await verifyRefreshToken(refreshToken);
@@ -33,18 +34,17 @@ async function isAuthenticated(req, res, next) {
       refrshtoken: refreshToken,
     },
   });
+
   const findToken = findDBToken.dataValues.refrshtoken;
   if (findToken !== refreshToken) {
     return next(new Error('refreshTokenNotMatched'));
   }
 
   // 재발급 진행
-  const neqAccessToken = jwt.sign({ id: verifiedRefreshToken.id }, process.env.SECRETTEXT, { expiresIn: '30s' });
-  const newVerifyAccessToken = verifyAccessToken(neqAccessToken);
-
+  const newAccessToken = jwt.sign({ id: verifiedRefreshToken.id }, process.env.SECRETTEXT, { expiresIn: '30s' });
+  const newVerifyAccessToken = verifyAccessToken(newAccessToken);
   req.user = newVerifyAccessToken;
-  req.accessToken = neqAccessToken;
-
+  req.accessToken = newAccessToken;
   next();
 }
 
