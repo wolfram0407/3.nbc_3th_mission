@@ -1,4 +1,10 @@
 
+// 쿠키
+// accessToken : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
+// accessToken : eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6OCwiaWF0IjoxNzAwNDAzMDA3LCJleHAiOjE3MDA0ODk0MDd9.hOMXEIqFOCvqSvbm0xXSdehs6I4hQVwT8kj20eu3J2Q
+// 로그인 시 발급 받은 토큰을 같이 넣어야합니다.
+
+
 ### 회원 등록
 POST http://localhost:3003/api/auth/signup
 Content-Type: application/json
@@ -21,11 +27,9 @@ Content-Type: application/json
 
 ### 회원상세정보
 GET http://localhost:3003/api/mypage
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAwMjI2MTA1LCJleHAiOjE3MDAyMjYxMzV9.jp9w24vgViFGZ8-zG0sLxGkTrJ42dGgNVn12j1fe3eQ
 
 ### 신규 Product 생성
 Post http://localhost:3003/api/products/new
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjI1MDE1LCJleHAiOjE3MDAyMjUwNDV9.LRLvhxgX261G_SBuRuU3CYzvf83WiESUPG1pPCLAVms
 Content-Type: application/json
 
 {
@@ -37,15 +41,12 @@ Content-Type: application/json
 
 ### 전체 Product 조회
 GET http://localhost:3003/api/products?sort=ASC
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NCwiaWF0IjoxNzAwMjI2MDI5LCJleHAiOjE3MDAyMjYwNTl9.0SmMm-9leJ3seUY9kyK-ph5VTuPIbdZplg4sCHEPzyo
 
 ### Product 상세 조회
 GET http://localhost:3003/api/product/3
-Authorization:  eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
 
 ### Product 수정
 Put http://localhost:3003/api/product/12
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
 Content-Type: application/json
 
 {
@@ -55,6 +56,5 @@ Content-Type: application/json
 
 ### Product 삭제
 DELETE http://localhost:3003/api/product/12
-Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjA4NDAzLCJleHAiOjE3MDAyMTAyMDN9.8z04dOigLigBkRAegmOakYznkk-tKZrKx2fD4V-f8ZA
 
 
