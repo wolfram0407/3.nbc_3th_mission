@@ -8,7 +8,6 @@ const { isAuthenticated } = require('../middlewares/auth.js');
 const router = express.Router();
 
 router.get('/mypage', isAuthenticated, async (req, res) => {
-  const cookies = req.cookies;
   const isUser = req.user.id;
   const user = await Users.findOne({
     attributes: ['id', 'email', 'username', 'createdAt'],
@@ -16,7 +15,10 @@ router.get('/mypage', isAuthenticated, async (req, res) => {
       id: isUser,
     },
   });
-  res.json(user);
+  if (req.accessToken) {
+    return res.status(200).send({ user, accessToken: req.accessToken });
+  }
+  res.status(200).json(user);
 });
 
 module.exports = router;

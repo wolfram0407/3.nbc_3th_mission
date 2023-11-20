@@ -30,7 +30,7 @@ async function isAuthenticated(req, res, next) {
 
   const findDBToken = await Refreshtoken.findOne({
     where: {
-      userId: verifiedRefreshToken.id,
+      refrshtoken: refreshToken,
     },
   });
   const findToken = findDBToken.dataValues.refrshtoken;
