@@ -1,5 +1,5 @@
 function errorHandler(errName, req, res) {
-  console.log(errName);
+  //console.log(errName);
   switch (errName) {
     case 'ExistsEmail':
       return res.status(400).json({

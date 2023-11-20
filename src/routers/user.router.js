@@ -9,7 +9,6 @@ const router = express.Router();
 
 router.get('/mypage', isAuthenticated, async (req, res) => {
   const cookies = req.cookies;
-  console.log(cookies);
   const isUser = req.user.id;
   const user = await Users.findOne({
     attributes: ['id', 'email', 'username', 'createdAt'],
