@@ -4,7 +4,7 @@ POST http://localhost:3003/api/auth/signup
 Content-Type: application/json
 
 {
-  "email" : "test4@exampl.com",   
+  "email" : "test8@exampl.com",   
   "password" : "1q2w3e4r!@",
   "passwordConfirm" : "1q2w3e4r!@",
   "username" : "정근우"
@@ -15,7 +15,7 @@ POST http://localhost:3003/api/auth/login
 Content-Type: application/json
 
 {
-  "email" : "test4@exampl.com",
+  "email" : "test8@exampl.com",
   "password" : "1q2w3e4r!@"
 }
 
@@ -29,9 +29,10 @@ Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiaWF0IjoxNzAwMjI1
 Content-Type: application/json
 
 {
-  "title" : "test title4",
+  "title" : " ",
   "contents" : "test contents4",
   "price" : 10000
+
 }
 
 ### 전체 Product 조회

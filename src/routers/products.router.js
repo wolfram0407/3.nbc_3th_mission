@@ -23,6 +23,9 @@ router.get('/products', isAuthenticated, async (req, res, next) => {
   if (!products) {
     return next(new Error('CheckDBConnect'));
   }
+  if (req.accessToken) {
+    return res.status(200).send({ products, accessToken: req.accessToken });
+  }
   res.status(200).send(products);
 });
 // getProductOne
@@ -37,6 +40,9 @@ router.get('/product/:id', isAuthenticated, async (req, res, next) => {
   });
   if (!product) {
     return next(new Error('ProductNotFound'));
+  }
+  if (req.accessToken) {
+    return res.status(200).send({ product, accessToken: req.accessToken });
   }
   res.status(200).send(product);
 });
@@ -63,6 +69,9 @@ router.post(
     const newProduct = await Products.create(preProduct);
     if (!newProduct) {
       return next(new Error('CheckDBConnect'));
+    }
+    if (req.accessToken) {
+      return res.status(200).send({ message: '등록되었습니다.', accessToken: req.accessToken });
     }
     res.status(201).json({
       message: '등록되었습니다.',
@@ -106,6 +115,12 @@ router.put(
     if (!updateProducts) {
       return next(new Error('CheckDBConnect'));
     }
+    if (req.accessToken) {
+      return res.status(200).json({
+        message: '상품 수정하였습니다.',
+        accessToken: req.accessToken,
+      });
+    }
     res.status(200).json({
       message: '상품 수정하였습니다.',
     });
@@ -121,6 +136,12 @@ router.delete('/product/:id', [isAuthenticated, checkProductOwn], async (req, re
   });
   if (!deleteProduct) {
     return next(new Error('CheckDBConnect'));
+  }
+  if (req.accessToken) {
+    return res.status(200).json({
+      message: '상품 삭제하였습니다.',
+      accessToken: req.accessToken,
+    });
   }
   res.status(200).json({
     message: '상품 삭제하였습니다.',

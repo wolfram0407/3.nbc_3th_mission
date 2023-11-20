@@ -17,6 +17,7 @@ function validateLeastOne(req, res, next) {
   }
   next();
 }
+
 module.exports = {
   validate,
   validateLeastOne,

@@ -17,6 +17,7 @@ router.post(
   '/auth/signup',
   [
     body('email')
+      .trim()
       .notEmpty()
       .withMessage('email 을 입력해주세요.')
       .isEmail()
@@ -121,22 +122,4 @@ router.post(
   }
 );
 
-router.get('/auth/refresh', async (req, res, next) => {
-  const refreshToken = req.cookies.jwt;
-
-  if (!refreshToken) {
-    return next(new Error('RefreshTokenNotFound'));
-  }
-  const findRefreshToken = await Refreshtoken.findOne({
-    where: {
-      refrshtoken: refreshToken,
-    },
-  });
-  if (!findRefreshToken) {
-    return next(new Error('Forbidden'));
-  }
-
-  const accessToken = jwt.sign({ id: findRefreshToken.dataValues.id }, process.env.SECRETTEXT, { expiresIn: '30s' });
-  res.send(accessToken);
-});
 module.exports = router;
