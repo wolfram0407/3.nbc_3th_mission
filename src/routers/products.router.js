@@ -26,7 +26,7 @@ router.get('/products', isAuthenticated, async (req, res, next) => {
   if (req.accessToken) {
     return res.status(200).send({ products, accessToken: req.accessToken });
   }
-  res.status(200).send(products);
+  return res.status(200).send(products);
 });
 // getProductOne
 router.get('/product/:id', isAuthenticated, async (req, res, next) => {
@@ -44,7 +44,7 @@ router.get('/product/:id', isAuthenticated, async (req, res, next) => {
   if (req.accessToken) {
     return res.status(200).send({ product, accessToken: req.accessToken });
   }
-  res.status(200).send(product);
+  return res.status(200).send(product);
 });
 // add new product
 router.post(
@@ -73,7 +73,7 @@ router.post(
     if (req.accessToken) {
       return res.status(200).send({ message: '등록되었습니다.', accessToken: req.accessToken });
     }
-    res.status(201).json({
+    return res.status(201).json({
       message: '등록되었습니다.',
     });
   }
@@ -121,7 +121,7 @@ router.put(
         accessToken: req.accessToken,
       });
     }
-    res.status(200).json({
+    return res.status(200).json({
       message: '상품 수정하였습니다.',
     });
   }
@@ -143,7 +143,7 @@ router.delete('/product/:id', [isAuthenticated, checkProductOwn], async (req, re
       accessToken: req.accessToken,
     });
   }
-  res.status(200).json({
+  return res.status(200).json({
     message: '상품 삭제하였습니다.',
   });
 });

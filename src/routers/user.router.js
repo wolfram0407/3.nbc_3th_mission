@@ -18,7 +18,7 @@ router.get('/mypage', isAuthenticated, async (req, res) => {
   if (req.accessToken) {
     return res.status(200).send({ user, accessToken: req.accessToken });
   }
-  res.status(200).json(user);
+  return res.status(200).json(user);
 });
 
 module.exports = router;

@@ -65,7 +65,7 @@ router.post(
     }
     const NewUser = existedUser.dataValues;
     delete NewUser.password;
-    res.status(201).json({
+    return res.status(201).json({
       NewUser,
       message: '회원가입이 되었습니다.',
     });
@@ -118,7 +118,7 @@ router.post(
     if (!saveRefreshToken) {
       return next(new Error('NotCorrect'));
     }
-    res.status(200).send({ accessToken, refreshToken });
+    return res.status(200).send({ accessToken, refreshToken });
   }
 );
 
